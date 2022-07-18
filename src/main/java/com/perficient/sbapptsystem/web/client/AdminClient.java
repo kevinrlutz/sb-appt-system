@@ -35,6 +35,10 @@ public class AdminClient {
         return restTemplate.getForObject("http://localhost:8080/api/v1/users/" + userId, UserDto.class);
     }
 
+    public void deleteUser(String userId) {
+        restTemplate.delete("http://localhost:8080/api/v1/users/" + userId);
+    }
+
     public void setApiHost(String apiHost) {
         this.apiHost = apiHost;
     }

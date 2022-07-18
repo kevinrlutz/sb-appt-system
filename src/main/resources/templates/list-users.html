@@ -25,13 +25,16 @@
         </thead>
         <tbody>
             <tr th:each="user:${userList}">
-                <td><a th:text="${user.id}" th:href="@{/users/${user.id}}"></a></td>
+                <td><a th:text="${user.id}" th:href="@{/users/{userId}(userId=${user.id})}"></a></td>
                 <td th:text="${user.firstName}"></td>
                 <td th:text="${user.lastName}"></td>
                 <td th:text="${user.gender}"></td>
                 <td th:text="${user.age}"></td>
                 <td th:text="${user.email}"></td>
                 <td th:text="${user.phoneNumber}"></td>
+                <td><form action="/users" th:action="@{/users/{userId}(userId=${user.id})}" th:method="delete">
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </form></td>
             </tr>
         </tbody>
     </table>
