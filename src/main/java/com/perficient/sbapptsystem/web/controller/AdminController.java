@@ -26,6 +26,12 @@ public class AdminController {
         return "list-users";
     }
 
+    @GetMapping("/appointments")
+    public String appointments(Model model) {
+        model.addAttribute("apptList", new AdminClient(new RestTemplateBuilder()).getAllAppts());
+        return "list-appts";
+    }
+
     @GetMapping("/users/{userId}")
     public String user(Model model, @PathVariable("userId") String userId) {
         model.addAttribute("user", new AdminClient(new RestTemplateBuilder()).getUserById(userId));

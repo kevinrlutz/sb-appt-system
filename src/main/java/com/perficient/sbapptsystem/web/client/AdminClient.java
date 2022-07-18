@@ -1,5 +1,6 @@
 package com.perficient.sbapptsystem.web.client;
 
+import com.perficient.sbapptsystem.web.model.ApptDto;
 import com.perficient.sbapptsystem.web.model.UserDto;
 import org.apache.catalina.User;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -24,6 +25,10 @@ public class AdminClient {
 
     public List<UserDto> getAllUsers() {
         return restTemplate.getForObject("http://localhost:8080/api/v1/users", List.class);
+    }
+
+    public List<ApptDto> getAllAppts() {
+        return restTemplate.getForObject("http://localhost:8081/appointments", List.class);
     }
 
     public UserDto getUserById(String userId) {
