@@ -1,5 +1,6 @@
 package com.perficient.sbapptsystem.web.client;
 
+import com.perficient.sbapptsystem.web.model.ApptDto;
 import com.perficient.sbapptsystem.web.model.UserDto;
 import org.apache.catalina.User;
 import org.bson.types.ObjectId;
@@ -27,6 +28,10 @@ public class AdminClient {
 
     public List<UserDto> getAllUsers() {
         return restTemplate.getForObject("http://localhost:8080/api/v1/users", List.class);
+    }
+
+    public List<ApptDto> getAllAppts() {
+        return restTemplate.getForObject("http://localhost:8081/appointments", List.class);
     }
 
     public UserDto getUserById(String userId) {
@@ -61,6 +66,20 @@ public class AdminClient {
                 .build();
 
         return restTemplate.postForObject("http://localhost:8080/api/v1/users/", saveUser, UserDto.class);
+    }
+
+    public ApptDto createAppt(@RequestBody ApptDto apptDto) {
+        ApptDto saveAppt = ApptDto.builder()
+                .id(new ObjectId().toString())
+                .apptName(apptDto.getApptName())
+                .apptType(apptDto.getApptType())
+                .description(apptDto.getDescription())
+                .startTime(apptDto.getStartTime())
+                .endTime(apptDto.getEndTime())
+                .metadata(apptDto.getMetadata())
+                .build();
+
+        return restTemplate.postForObject("http://localhost:8081/appointments", saveAppt, ApptDto.class);
     }
 
     public void deleteUser(String userId) {
