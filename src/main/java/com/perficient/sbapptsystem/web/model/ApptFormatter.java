@@ -5,8 +5,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
-
 /**
  * Created by RA on 06-30-2022.
  */
@@ -15,9 +13,8 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ApptDto {
+public class ApptFormatter {
 
-    // Note: UUID is not accepted by MongoDB. Use String instead.
     private String id;
 
     private String apptName;
@@ -26,11 +23,10 @@ public class ApptDto {
 
     private String description;
 
-    private LocalDateTime startTime;
+    private String startTime;
 
-    private LocalDateTime endTime;
+    private String endTime;
 
-    // Choose appropriate data type (map?)
     private String metadata;
 
 }

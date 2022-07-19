@@ -2,7 +2,9 @@ package com.perficient.sbapptsystem.web.controller;
 
 import com.perficient.sbapptsystem.web.client.AdminClient;
 import com.perficient.sbapptsystem.web.model.ApptDto;
+import com.perficient.sbapptsystem.web.model.ApptFormatter;
 import com.perficient.sbapptsystem.web.model.UserDto;
+import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.HttpStatus;
@@ -47,6 +49,7 @@ public class AdminController {
     @GetMapping("/users/{userId}/create-appt")
     public String createAppt(Model model, @PathVariable("userId") String userId) {
         model.addAttribute("appt", new ApptDto());
+        model.addAttribute("user", new AdminClient(new RestTemplateBuilder()).getUserById(userId));
         return "create-appt";
     }
 
@@ -58,8 +61,9 @@ public class AdminController {
     }
 
     @PostMapping("/{userId}/appointments")
-    public String createAppt(@ModelAttribute @RequestBody ApptDto apptDto, @PathVariable("userId") String userId) {
-        new AdminClient(new RestTemplateBuilder()).createAppt(apptDto);
+    public String createAppt(@ModelAttribute @RequestBody ApptFormatter apptFormatter, @PathVariable("userId") String userId) {
+        UserDto user = new AdminClient(new RestTemplateBuilder()).getUserById(userId);
+        new AdminClient(new RestTemplateBuilder()).createAppt(apptFormatter, user);
         return "redirect:/users/" + userId;
     }
 

@@ -1,6 +1,7 @@
 package com.perficient.sbapptsystem.web.client;
 
 import com.perficient.sbapptsystem.web.model.ApptDto;
+import com.perficient.sbapptsystem.web.model.ApptFormatter;
 import com.perficient.sbapptsystem.web.model.UserDto;
 import org.apache.catalina.User;
 import org.bson.types.ObjectId;
@@ -10,6 +11,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.client.RestTemplate;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -68,16 +71,28 @@ public class AdminClient {
         return restTemplate.postForObject("http://localhost:8080/api/v1/users/", saveUser, UserDto.class);
     }
 
-    public ApptDto createAppt(@RequestBody ApptDto apptDto) {
+    public ApptDto createAppt(@RequestBody ApptFormatter apptFormatter, UserDto user) {
+
+        String startTime = apptFormatter.getStartTime();
+        String endTime = apptFormatter.getEndTime();
+        System.out.println(startTime + " --- " + endTime);
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
+        LocalDateTime formattedStartTime = LocalDateTime.parse(startTime, formatter);
+        LocalDateTime formattedEndTime = LocalDateTime.parse(endTime, formatter);
+
         ApptDto saveAppt = ApptDto.builder()
                 .id(new ObjectId().toString())
-                .apptName(apptDto.getApptName())
-                .apptType(apptDto.getApptType())
-                .description(apptDto.getDescription())
-                .startTime(apptDto.getStartTime())
-                .endTime(apptDto.getEndTime())
-                .metadata(apptDto.getMetadata())
+                .apptName(apptFormatter.getApptName())
+                .apptType(apptFormatter.getApptType())
+                .description(apptFormatter.getDescription())
+                .startTime(formattedStartTime)
+                .endTime(formattedEndTime)
+                .metadata(apptFormatter.getMetadata())
                 .build();
+
+        user.getAppointmentList().add(saveAppt);
+        updateUser(user.getId(), user);
 
         return restTemplate.postForObject("http://localhost:8081/appointments", saveAppt, ApptDto.class);
     }

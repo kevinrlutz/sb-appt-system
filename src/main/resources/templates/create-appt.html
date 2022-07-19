@@ -14,7 +14,7 @@
     <br/>
     <h3>Create New Appointment</h3>
 
-    <form th:action="@{/}" th:object="${appt}" th:method="post">
+    <form th:action="@{/{userId}/appointments(userId=${user.id})}" th:object="${appt}" th:method="post">
 
         <input type="text" th:field="*{apptName}" placeholder="Name of the appointment." class="form-control mb-4 col-4">
 
@@ -27,9 +27,9 @@
 
         <input type="text" th:field="*{description}" placeholder="Provide a brief description." class="form-control mb-4 col-4">
 
-        Start Time: <input type="datetime-local" th:field="*{startTime}" placeholder="Choose a start time for your appointment." class="form-control mb-4 col-4">
+        Start Time: <input type="datetime-local" name="startTime" th:field="*{startTime}" class="form-control mb-4 col-4">
 
-        End Time: <input type="datetime-local" th:field="*{endTime}" placeholder="Choose an end time for your appointment." class="form-control mb-4 col-4">
+        End Time: <input type="datetime-local" name="endTime" th:field="*{endTime}" class="form-control mb-4 col-4">
 
         <input type="text" th:field="*{metadata}" placeholder="Provide any additional information." class="form-control mb-4 col-4">
 
@@ -38,7 +38,7 @@
 
     <hr>
 
-    <a href="/users">Back to User List</a>
+    <a href="javascript:history.back()">Go Back</a>
 </div>
 </body>
 </html>
