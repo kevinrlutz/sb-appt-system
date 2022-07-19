@@ -11,18 +11,31 @@
 <div class="container">
     <h1>Appointment Management System | Admin</h1>
     <hr>
+    <br/>
 
-    <form>
-        <input type="button" value="List all users" onclick="window.location.href='/users'" />
-    </form>
+    <div class="grid">
+        <div class="row">
+            <div class="col-6 container text-center">
+                <a href="/users">
+                    <img src=".././static/images/user.png" class="col-4"><br/>
+                    <h2>Users</h2>
+                </a>
+            </div>
+            <div class="col-6  container text-center">
+                <a href="/appointments">
+                    <img src=".././static/images/appointment.png" class="col-4"><br/>
+                    <h2>Appointments</h2>
+                </a>
+            </div>
+        </div>
+
+    </div>
 
     <br />
-
-    <form>
-        <input type="button" value="List all appointments" onclick="window.location.href='/appointments'" />
-    </form>
-
-    <br />
+    <footer class="mt-5 text-center">
+        <p>Developed by Kevin Lutz and Rayaan Attari</p>
+        <a href="http://www.perficient.com" target="_blank"> <img src=".././static/images/prft-logo.png" class="col-2"> </a>
+    </footer>
 </div>
 </body>
 </html>
