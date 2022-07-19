@@ -8,6 +8,7 @@ import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -25,6 +26,7 @@ public class AdminController {
     @GetMapping("/users")
     public String users(Model model) {
         model.addAttribute("userList", new AdminClient(new RestTemplateBuilder()).getAllUsers());
+        model.addAttribute("searchDto", new UserDto());
         return "list-users";
     }
 
@@ -51,6 +53,17 @@ public class AdminController {
         model.addAttribute("appt", new ApptDto());
         model.addAttribute("user", new AdminClient(new RestTemplateBuilder()).getUserById(userId));
         return "create-appt";
+    }
+
+
+    @RequestMapping(value = "/users/search/",
+            method = RequestMethod.POST,
+            consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE,
+            produces = {MediaType.APPLICATION_ATOM_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
+    public String searchUser(Model model, UserDto searchDto) {
+        model.addAttribute("searchDto", new UserDto());
+        model.addAttribute("userList", new AdminClient(new RestTemplateBuilder()).findByLastName(searchDto.getLastName()));
+        return "list-users";
     }
 
 
