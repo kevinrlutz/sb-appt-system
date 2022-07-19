@@ -68,6 +68,20 @@ public class AdminClient {
         return restTemplate.postForObject("http://localhost:8080/api/v1/users/", saveUser, UserDto.class);
     }
 
+    public ApptDto createAppt(@RequestBody ApptDto apptDto) {
+        ApptDto saveAppt = ApptDto.builder()
+                .id(new ObjectId().toString())
+                .apptName(apptDto.getApptName())
+                .apptType(apptDto.getApptType())
+                .description(apptDto.getDescription())
+                .startTime(apptDto.getStartTime())
+                .endTime(apptDto.getEndTime())
+                .metadata(apptDto.getMetadata())
+                .build();
+
+        return restTemplate.postForObject("http://localhost:8081/appointments", saveAppt, ApptDto.class);
+    }
+
     public void deleteUser(String userId) {
         restTemplate.delete("http://localhost:8080/api/v1/users/" + userId);
     }

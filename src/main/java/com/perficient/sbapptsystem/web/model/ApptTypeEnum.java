@@ -5,5 +5,5 @@ package com.perficient.sbapptsystem.web.model;
  */
 
 public enum ApptTypeEnum {
-    INITIAL, FOLLOW_UP, LAB, PHYSICAL, SURGERY, SESSION
+    INITIAL, PRIMARY_CARE, OPTOMETRIST, DENTIST, DERMATOLOGIST
 }

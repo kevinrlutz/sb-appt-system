@@ -69,7 +69,10 @@
         </tr>
         </tbody>
     </table>
-    <button class="btn btn-info">Create Appointment</button>
+
+    <form th:action="@{/users/{userId}/create-appt(userId=${user.id})}">
+        <button type="submit" class="btn btn-primary">Create Appointment</button>
+    </form>
 
     <br/>
     <br/>
