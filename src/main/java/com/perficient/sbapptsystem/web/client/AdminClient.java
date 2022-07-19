@@ -38,6 +38,10 @@ public class AdminClient {
         return restTemplate.getForObject("http://localhost:8080/api/v1/users/" + userId, UserDto.class);
     }
 
+    public List<UserDto> findByLastName(String lastName) {
+        return restTemplate.getForObject("http://localhost:8080/api/v1/users/search/" + lastName, List.class);
+    }
+
     public void updateUser(String userId, @RequestBody UserDto user) {
         UserDto updatedUser = UserDto.builder()
                 .id(userId)

@@ -11,8 +11,19 @@
 <div class="container">
     <h1>Appointment Management System | List of Users</h1>
     <br/>
+    <form th:object="${searchDto}" th:action="@{/users/search/}" method="POST">
+        <div class="form-group">
+            <label for="search">Search by Last Name</label>
+            <input type="text" id="search" th:field="*{lastName}" class="form-control col-4" placeholder="Search (Last Name)">
+        </div>
+            <div class="btn-group">
+                <button type="submit" class="btn btn-primary rounded mr-5">Search</button>
+                <a href="/users" class="btn btn-primary rounded">Show All</a>
+            </div>
+    </form>
     <br/>
-    <table class="table">
+    <br/>
+    <table class="table" th:if="${userList.size() > 0}">
         <thead>
         <tr>
             <th>ID</th>
@@ -40,7 +51,9 @@
         </tbody>
     </table>
 
-    <form>
+    <strong th:unless="${userList.size() > 0}">No users to list.</strong>
+
+    <form class="center-block text-center">
         <input type="button" value="Add New User" onclick="window.location.href='/create-user'" class="btn btn-info"/>
     </form>
 
