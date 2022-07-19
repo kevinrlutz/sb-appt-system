@@ -9,8 +9,9 @@
 </head>
 <body>
 <div class="container">
-    <h1>Appointment Management System | Admin</h1>
-    <hr>
+    <h1>Appointment Management System | User Info</h1>
+    <br/>
+    <br/>
     <table class="table">
         <thead>
         <tr>
@@ -30,6 +31,11 @@
             <td th:text="${user.age}"></td>
             <td th:text="${user.email}"></td>
             <td th:text="${user.phoneNumber}"></td>
+            <td>
+                <form th:action="@{/users/{userId}/edit(userId=${user.id})}">
+                    <button type="submit" class="btn btn-primary">Edit</button>
+                </form>
+            </td>
         </tr>
         </tbody>
     </table>
@@ -63,6 +69,10 @@
         </tr>
         </tbody>
     </table>
+    <button class="btn btn-info">Create Appointment</button>
+
+    <br/>
+    <br/>
 
     <a href="/users">Back to User List</a>
 </div>

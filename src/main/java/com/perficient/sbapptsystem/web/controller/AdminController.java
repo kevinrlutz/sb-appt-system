@@ -37,12 +37,38 @@ public class AdminController {
         return "user";
     }
 
+    @GetMapping("/create-user")
+    public String createUser(Model model) {
+        model.addAttribute("user", new UserDto());
+        return "create-user";
+    }
+
+    @PostMapping
+    public String createUser(@ModelAttribute @RequestBody UserDto user) {
+        new AdminClient(new RestTemplateBuilder()).createUser(user);
+        return "redirect:/users";
+    }
+
+    @GetMapping("/users/{userId}/edit")
+    public String updateUser(Model model, @PathVariable("userId") String userId) {
+        model.addAttribute("user", new AdminClient(new RestTemplateBuilder()).getUserById(userId));
+        return "edit-user";
+    }
+
+    @PutMapping("/{userId}")
+    public String updateUser(@PathVariable("userId") String userId, @ModelAttribute @RequestBody UserDto user) {
+        user.setAppointmentList(new AdminClient(new RestTemplateBuilder()).getUserById(userId).getAppointmentList());
+        user.setId(userId);
+
+        new AdminClient(new RestTemplateBuilder()).updateUser(userId, user);
+        return "redirect:/users" ;
+    }
+
     @DeleteMapping("/users/{userId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ResponseBody
-    public String deleteUser(@PathVariable("userId") String userId) throws InterruptedException {
+    public String deleteUser(@PathVariable("userId") String userId) {
         new AdminClient(new RestTemplateBuilder()).deleteUser(userId);
-        Thread.sleep(1000);
         return "refresh:/users";
     }
 }

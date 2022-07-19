@@ -9,8 +9,9 @@
 </head>
 <body>
 <div class="container">
-    <h1>Appointment Management System | Admin</h1>
-    <hr>
+    <h1>Appointment Management System | List of Users</h1>
+    <br/>
+    <br/>
     <table class="table">
         <thead>
         <tr>
@@ -32,14 +33,22 @@
                 <td th:text="${user.age}"></td>
                 <td th:text="${user.email}"></td>
                 <td th:text="${user.phoneNumber}"></td>
-                <td><form action="/users" th:action="@{/users/{userId}(userId=${user.id})}" th:method="delete">
+                <td><form onsubmit="setTimeout(function(){window.location.reload();},100);" th:action="@{/users/{userId}(userId=${user.id})}" th:method="delete">
                     <button type="submit" class="btn btn-danger">Delete</button>
                 </form></td>
             </tr>
         </tbody>
     </table>
 
+    <form>
+        <input type="button" value="Add New User" onclick="window.location.href='/create-user'" class="btn btn-info"/>
+    </form>
+
+    <br/>
+
     <a href="/">Back to Home</a>
+
+
 </div>
 </body>
 </html>
