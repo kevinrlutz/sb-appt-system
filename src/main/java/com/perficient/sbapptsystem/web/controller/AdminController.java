@@ -102,4 +102,13 @@ public class AdminController {
         new AdminClient(new RestTemplateBuilder()).deleteUser(userId);
         return "refresh:/users";
     }
+
+    @DeleteMapping("{userId}/appointments/{apptId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ResponseBody
+    public String deleteAppt(@PathVariable("userId") String userId, @PathVariable("apptId") String apptId) {
+        new AdminClient(new RestTemplateBuilder()).deleteAppt(userId, apptId);
+        return "refresh:/users/" + userId;
+    }
+
 }

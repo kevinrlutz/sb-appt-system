@@ -3,7 +3,6 @@ package com.perficient.sbapptsystem.web.client;
 import com.perficient.sbapptsystem.web.model.ApptDto;
 import com.perficient.sbapptsystem.web.model.ApptFormatter;
 import com.perficient.sbapptsystem.web.model.UserDto;
-import org.apache.catalina.User;
 import org.bson.types.ObjectId;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -39,6 +38,10 @@ public class AdminClient {
 
     public UserDto getUserById(String userId) {
         return restTemplate.getForObject("http://localhost:8080/api/v1/users/" + userId, UserDto.class);
+    }
+
+    public ApptDto getApptById(String apptId) {
+        return restTemplate.getForObject("http://localhost:8081/appointments/" + apptId, ApptDto.class);
     }
 
     public List<UserDto> findByLastName(String lastName) {
@@ -79,7 +82,7 @@ public class AdminClient {
 
         String startTime = apptFormatter.getStartTime();
         String endTime = apptFormatter.getEndTime();
-        System.out.println(startTime + " --- " + endTime);
+        // System.out.println(startTime + " --- " + endTime);
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
         LocalDateTime formattedStartTime = LocalDateTime.parse(startTime, formatter);
@@ -103,6 +106,16 @@ public class AdminClient {
 
     public void deleteUser(String userId) {
         restTemplate.delete("http://localhost:8080/api/v1/users/" + userId);
+    }
+
+    public void deleteAppt(String userId, String apptId) {
+        UserDto user = getUserById(userId);
+        ApptDto deleteAppt = getApptById(apptId);
+
+        user.getAppointmentList().remove(deleteAppt);
+        updateUser(user.getId(), user);
+
+        restTemplate.delete("http://localhost:8081/appointments/" + apptId);
     }
 
     public void setApiHost(String apiHost) {
