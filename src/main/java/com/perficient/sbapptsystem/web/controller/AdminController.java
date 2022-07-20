@@ -15,6 +15,11 @@ import org.springframework.web.bind.annotation.*;
 public class AdminController {
 
     @GetMapping("/")
+    public String login(Model model) {
+        return "login";
+    }
+
+    @GetMapping("/home")
     public String index() {
         return "index";
     }
@@ -70,7 +75,7 @@ public class AdminController {
     }
 
 
-    @PostMapping
+    @PostMapping("/create")
     public String createUser(@ModelAttribute @RequestBody UserDto user) {
         new AdminClient(new RestTemplateBuilder()).createUser(user);
         return "redirect:/users";
