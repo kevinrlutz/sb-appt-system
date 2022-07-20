@@ -4,16 +4,12 @@ import com.perficient.sbapptsystem.web.client.AdminClient;
 import com.perficient.sbapptsystem.web.model.ApptDto;
 import com.perficient.sbapptsystem.web.model.ApptFormatter;
 import com.perficient.sbapptsystem.web.model.UserDto;
-import org.apache.catalina.User;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @Controller
 public class AdminController {
@@ -40,6 +36,13 @@ public class AdminController {
     public String user(Model model, @PathVariable("userId") String userId) {
         model.addAttribute("user", new AdminClient(new RestTemplateBuilder()).getUserById(userId));
         return "user";
+    }
+
+    @GetMapping("/users/{userId}/appointments/{apptId}")
+    public String appointment(Model model, @PathVariable("userId") String userId, @PathVariable("apptId") String apptId) {
+        model.addAttribute("appt", new AdminClient(new RestTemplateBuilder()).getApptById(apptId));
+        model.addAttribute("user", new AdminClient(new RestTemplateBuilder()).getUserById(userId));
+        return "appt";
     }
 
     @GetMapping("/create-user")
@@ -80,10 +83,17 @@ public class AdminController {
         return "redirect:/users/" + userId;
     }
 
-    @GetMapping("/users/{userId}/edit")
+    @GetMapping("/users/{userId}/edit-user")
     public String updateUser(Model model, @PathVariable("userId") String userId) {
         model.addAttribute("user", new AdminClient(new RestTemplateBuilder()).getUserById(userId));
         return "edit-user";
+    }
+
+    @GetMapping("users/{userId}/appointments/{apptId}/edit-appt")
+    public String updateAppt(Model model, @PathVariable("userId") String userId, @PathVariable("apptId") String apptId) {
+        model.addAttribute("user", new AdminClient(new RestTemplateBuilder()).getUserById(userId));
+        model.addAttribute("appt", new AdminClient(new RestTemplateBuilder()).getApptById(apptId));
+        return "edit-appt";
     }
 
     @PutMapping("/{userId}")
@@ -93,6 +103,14 @@ public class AdminController {
 
         new AdminClient(new RestTemplateBuilder()).updateUser(userId, user);
         return "redirect:/users" ;
+    }
+
+    @PutMapping("/users/{userId}/appointments/{apptId}")
+    public String updateAppt(@ModelAttribute @RequestBody ApptFormatter apptFormatter, @PathVariable("userId") String userId, @PathVariable("apptId") String apptId) {
+        apptFormatter.setId(apptId);
+        new AdminClient(new RestTemplateBuilder()).updateAppt(apptId, apptFormatter);
+
+        return "redirect:/users/" + userId + "/appointments/" + apptId;
     }
 
     @DeleteMapping("/users/{userId}")

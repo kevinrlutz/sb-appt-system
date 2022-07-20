@@ -32,7 +32,7 @@
             <td th:text="${user.email}"></td>
             <td th:text="${user.phoneNumber}"></td>
             <td>
-                <form th:action="@{/users/{userId}/edit(userId=${user.id})}">
+                <form th:action="@{/users/{userId}/edit-user(userId=${user.id})}">
                     <button type="submit" class="btn btn-primary">Edit</button>
                 </form>
             </td>
@@ -56,16 +56,18 @@
             <th>Description</th>
             <th>Start Time</th>
             <th>End Time</th>
+            <th>Metadata</th>
         </tr>
         </thead>
         <tbody>
         <tr th:each="appt:${user.appointmentList}">
-            <td th:text="${appt.id}"></td>
+            <td><a th:text="${appt.id}" th:href="@{/users/{userId}/appointments/{apptId}(userId=${user.id}, apptId=${appt.id})}"></a></td>
             <td th:text="${appt.apptName}"></td>
             <td th:text="${appt.apptType}"></td>
             <td th:text="${appt.description}"></td>
             <td th:text="${appt.startTime}"></td>
             <td th:text="${appt.endTime}"></td>
+            <td th:text="${appt.metadata}"></td>
             <td><form onsubmit="setTimeout(function(){window.location.reload();},100);" th:action="@{/{userId}/appointments/{apptId}(userId=${user.id}, apptId=${appt.id})}" th:method="delete">
                 <button type="submit" class="btn btn-danger">Delete</button>
             </form></td>

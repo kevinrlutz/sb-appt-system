@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Appointment Information</title>
+    <link rel="stylesheet"
+          href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+          crossorigin="anonymous">
+</head>
+<body>
+<div class="container">
+    <h1>Appointment Management System | Appointment Info</h1>
+    <br/>
+    <br/>
+    <table class="table">
+           <thead>
+           <tr>
+               <th>Name</th>
+               <th>Type</th>
+               <th>Description</th>
+               <th>Start Time</th>
+               <th>End Time</th>
+               <th>Metadata</th>
+           </tr>
+           </thead>
+    <tbody>
+        <tr>
+            <td th:text="${appt.apptName}"></td>
+            <td th:text="${appt.apptType}"></td>
+            <td th:text="${appt.description}"></td>
+            <td th:text="${appt.startTime}"></td>
+            <td th:text="${appt.endTime}"></td>
+            <td th:text="${appt.metadata}"></td>
+            <td>
+                <form th:action="@{/users/{userId}/appointments/{apptId}/edit-appt(userId=${user.id}, apptId=${appt.id})}">
+                    <button type="submit" class="btn btn-primary">Edit</button>
+                </form>
+            </td>
+        </tr>
+    </tbody>
+    </table>
+</div>
+
+</body>
+</html>

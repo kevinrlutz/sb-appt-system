@@ -121,4 +121,26 @@ public class AdminClient {
     public void setApiHost(String apiHost) {
         this.apiHost = apiHost;
     }
+
+    public void updateAppt(String apptId, @RequestBody ApptFormatter apptFormatter) {
+
+        String startTime = apptFormatter.getStartTime();
+        String endTime = apptFormatter.getEndTime();
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
+        LocalDateTime formattedStartTime = LocalDateTime.parse(startTime, formatter);
+        LocalDateTime formattedEndTime = LocalDateTime.parse(endTime, formatter);
+
+        ApptDto updateAppt = ApptDto.builder()
+                .id(apptId)
+                .apptName(apptFormatter.getApptName())
+                .apptType(apptFormatter.getApptType())
+                .description(apptFormatter.getDescription())
+                .startTime(formattedStartTime)
+                .endTime(formattedEndTime)
+                .metadata(apptFormatter.getMetadata())
+                .build();
+
+        restTemplate.put("http://localhost:8081/appointments/" + apptId, updateAppt);
+    }
 }
