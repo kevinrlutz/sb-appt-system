@@ -4,8 +4,6 @@ import com.perficient.sbapptsystem.web.client.AdminClient;
 import com.perficient.sbapptsystem.web.model.ApptDto;
 import com.perficient.sbapptsystem.web.model.ApptFormatter;
 import com.perficient.sbapptsystem.web.model.UserDto;
-import org.apache.catalina.User;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -13,12 +11,15 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @Controller
 public class AdminController {
 
     @GetMapping("/")
+    public String login(Model model) {
+        return "login";
+    }
+
+    @GetMapping("/home")
     public String index() {
         return "index";
     }
@@ -67,7 +68,7 @@ public class AdminController {
     }
 
 
-    @PostMapping
+    @PostMapping("/create")
     public String createUser(@ModelAttribute @RequestBody UserDto user) {
         new AdminClient(new RestTemplateBuilder()).createUser(user);
         return "redirect:/users";
