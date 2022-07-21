@@ -1,10 +1,64 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>List all appointments</title>
+    <link rel="stylesheet"
+          href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+          crossorigin="anonymous">
+    <style media="screen">
+        h1 {margin: 0.5em 0 0.5em 0;}
+        #t1 tr:nth-child(odd) {background-color: white;}
+        #t1 tr:nth-child(even) {background-color: #eaeaea;}
+    </style>
 </head>
 <body>
-
+<div class="container">
+    <h1>Appointment Management System | List of Appointments</h1>
+    <br/>
+    <form th:object="${searchAppt}" th:action="@{/appointments/search/}" method="POST">
+        <div class="form-group">
+            <label for="search">Search by Appointment Name</label>
+            <input type="text" id="search" th:field="*{apptName}" class="form-control col-4" placeholder="Search (Name)">
+        </div>
+        <div class="btn-group">
+            <button type="submit" class="btn btn-primary rounded mr-5">Search</button>
+            <a href="/appointments" class="btn btn-primary rounded">Show All</a>
+        </div>
+    </form>
+    <br/>
+    <br/>
+    <table id="t1" class="table" th:if="${apptList.size() > 0}">
+        <thead>
+        <tr>
+            <th>User ID</th>
+            <th>Appointment ID</th>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Description</th>
+            <th>Start Time</th>
+            <th>End Time</th>
+            <th>Metadata</th>
+            <th>Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="appt:${apptList}">
+            <td th:text="${appt.userId}"></td>
+            <td th:text="${appt.id}"></td>
+            <td th:text="${appt.apptName}"></td>
+            <td th:text="${appt.apptType}"></td>
+            <td th:text="${appt.description}"></td>
+            <td th:text="${appt.startTime}"></td>
+            <td th:text="${appt.endTime}"></td>
+            <td th:text="${appt.metadata}"></td>
+            <td></td>
+        </tr>
+        </tbody>
+    </table>
+    <a href="/home">Back to Home</a>
+</div>
+<h2>Visit individual user page to create an appointment.</h2>
 </body>
 </html>

@@ -48,6 +48,11 @@ public class AdminClient {
         return restTemplate.getForObject("http://localhost:8080/api/v1/users/search/" + lastName, List.class);
     }
 
+    public List<ApptDto> findByApptName(String apptName) {
+        System.out.println("In findByApptName client method");
+        return restTemplate.getForObject("http://localhost:8081/appointments/search/" + apptName, List.class);
+    }
+
     public void updateUser(String userId, @RequestBody UserDto user) {
         UserDto updatedUser = UserDto.builder()
                 .id(userId)
@@ -88,6 +93,8 @@ public class AdminClient {
         LocalDateTime formattedStartTime = LocalDateTime.parse(startTime, formatter);
         LocalDateTime formattedEndTime = LocalDateTime.parse(endTime, formatter);
 
+        System.out.println("In AdminClient 1");
+
         ApptDto saveAppt = ApptDto.builder()
                 .id(new ObjectId().toString())
                 .apptName(apptFormatter.getApptName())
@@ -96,12 +103,16 @@ public class AdminClient {
                 .startTime(formattedStartTime)
                 .endTime(formattedEndTime)
                 .metadata(apptFormatter.getMetadata())
+                .userId(user.getId())
                 .build();
 
+        System.out.println(saveAppt);
         user.getAppointmentList().add(saveAppt);
         updateUser(user.getId(), user);
 
-        return restTemplate.postForObject("http://localhost:8081/appointments", saveAppt, ApptDto.class);
+        System.out.println("In AdminClient 2");
+
+        return restTemplate.postForObject("http://localhost:8081/appointments/", saveAppt, ApptDto.class);
     }
 
     public void deleteUser(String userId) {
@@ -139,8 +150,10 @@ public class AdminClient {
                 .startTime(formattedStartTime)
                 .endTime(formattedEndTime)
                 .metadata(apptFormatter.getMetadata())
+                .userId(apptFormatter.getUserId())
                 .build();
 
         restTemplate.put("http://localhost:8081/appointments/" + apptId, updateAppt);
     }
+
 }

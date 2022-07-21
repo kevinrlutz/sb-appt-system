@@ -19,6 +19,8 @@
 
     <form th:action="@{/{userId}/appointments(userId=${user.id})}" th:object="${appt}" th:method="post">
 
+        <input type="hidden" th:field="*{userId}" th:value="${user.id}">
+
         <input type="text" th:field="*{apptName}" placeholder="Name of the appointment." class="form-control mb-4 col-4">
 
         <select th:field="*{apptType}" class="form-control mb-4 col-4">

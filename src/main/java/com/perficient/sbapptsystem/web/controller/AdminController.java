@@ -34,6 +34,7 @@ public class AdminController {
     @GetMapping("/appointments")
     public String appointments(Model model) {
         model.addAttribute("apptList", new AdminClient(new RestTemplateBuilder()).getAllAppts());
+        model.addAttribute("searchAppt", new ApptDto());
         return "list-appts";
     }
 
@@ -74,6 +75,17 @@ public class AdminController {
         return "list-users";
     }
 
+    @RequestMapping(value="/appointments/search/",
+            method = RequestMethod.POST,
+            consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE,
+            produces = {MediaType.APPLICATION_ATOM_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
+    public String searchAppt(Model model, ApptDto searchDto) {
+        System.out.println("In searchAppt controller method");
+        model.addAttribute("searchAppt", new ApptDto());
+        model.addAttribute("apptList", new AdminClient(new RestTemplateBuilder()).findByApptName(searchDto.getApptName()));
+        return "list-appts";
+    }
+
 
     @PostMapping("/create")
     public String createUser(@ModelAttribute @RequestBody UserDto user) {
@@ -83,6 +95,7 @@ public class AdminController {
 
     @PostMapping("/{userId}/appointments")
     public String createAppt(@ModelAttribute @RequestBody ApptFormatter apptFormatter, @PathVariable("userId") String userId) {
+        System.out.println("In AdminController");
         UserDto user = new AdminClient(new RestTemplateBuilder()).getUserById(userId);
         new AdminClient(new RestTemplateBuilder()).createAppt(apptFormatter, user);
         return "redirect:/users/" + userId;
