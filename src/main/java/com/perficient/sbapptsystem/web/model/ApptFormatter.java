@@ -29,4 +29,6 @@ public class ApptFormatter {
 
     private String metadata;
 
+    private String userId;
+
 }
