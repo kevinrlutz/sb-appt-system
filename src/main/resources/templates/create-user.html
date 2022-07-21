@@ -18,26 +18,41 @@
     <h3>Create New User</h3>
 
     <form th:action="@{/create}" th:object="${user}" th:method="post">
+        <label for="firstName">First Name:</label>
+        <input id="firstName" type="text" th:field="*{firstName}" placeholder="First Name" class="form-control mb-4 col-4" required>
 
-        <input type="text" th:field="*{firstName}" placeholder="First Name" class="form-control mb-4 col-4" required>
-        <input type="text" th:field="*{lastName}" placeholder="Last Name" class="form-control mb-4 col-4" required>
-        <input type="number" min="1" max="130" th:field="*{age}" placeholder="Age" class="form-control mb-4 col-4" required>
-        <select th:field="*{gender}" class="form-control mb-4 col-4" required>
+        <label for="lastName">Last Name:</label>
+        <input id="lastName" type="text" th:field="*{lastName}" placeholder="Last Name" class="form-control mb-4 col-4" required>
+
+        <label for="age">Age:</label>
+        <input id="age" type="number" min="1" max="130" th:field="*{age}" placeholder="Age" class="form-control mb-4 col-4" required>
+
+        <label for="gender">Gender:</label>
+        <select id="gender" th:field="*{gender}" class="form-control mb-4 col-4" required>
             <option value="Male">Male</option>
             <option value="Female">Female</option>
             <option value="Other">Other</option>
         </select>
-        <input type="email" th:field="*{email}" placeholder="Email" class="form-control mb-4 col-4" required>
-        <small>Format: ###-###-####</small>
-        <input type="tel" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" th:field="*{phoneNumber}" placeholder="Phone Number" class="form-control mb-4 col-4" required>
 
-        <button type="submit" class="btn btn-info col-2">Save
-            User</button>
+        <label for="email">Email:</label>
+        <input id="email" type="email" th:field="*{email}" placeholder="Email" class="form-control mb-4 col-4" required>
+
+        <label for="phoneNumber">Phone Number:</label>
+        <br/>
+        <small>Format: ###-###-####</small>
+        <input id="phoneNumber" type="tel" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" th:field="*{phoneNumber}" placeholder="Phone Number" class="form-control mb-4 col-4" required>
+
+        <button type="submit" class="btn btn-info col-2">Save User</button>
     </form>
 
     <hr>
 
-    <a href="/users">Back to User List</a>
+    <a href="/users" class="mb-5">Back to User List</a>
+
+    <br/>
+    <br/>
+    <br/>
+    <br/>
 </div>
 </body>
 </html>
