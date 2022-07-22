@@ -11,6 +11,37 @@
         h1 {margin: 0.5em 0 0.5em 0;}
         #t1 tr:nth-child(odd) {background-color: white;}
         #t1 tr:nth-child(even) {background-color: #eaeaea;}
+
+        .cell {
+            width: 28%;
+        }
+
+        /* The alert message box */
+        .info {
+            padding: 20px;
+            background-color: #50a6ff;
+            color: white;
+            margin-bottom: 15px;
+            width: 100%;
+            border-radius: 10px;
+        }
+
+        /* The close button */
+        .closebtn {
+            margin-left: 15px;
+            color: white;
+            font-weight: bold;
+            float: right;
+            font-size: 22px;
+            line-height: 20px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        /* When moving the mouse over the close button */
+        .closebtn:hover {
+            color: black;
+        }
     </style>
 </head>
 <body>
@@ -32,8 +63,7 @@
     <table id="t1" class="table" th:if="${apptList.size() > 0}">
         <thead>
         <tr>
-            <th>User ID</th>
-            <th>Appointment ID</th>
+            <th>Links</th>
             <th>Name</th>
             <th>Type</th>
             <th>Description</th>
@@ -45,20 +75,30 @@
         </thead>
         <tbody>
         <tr th:each="appt:${apptList}">
-            <td th:text="${appt.userId}"></td>
-            <td th:text="${appt.id}"></td>
+            <td class="cell">
+                [User] <a th:text="${appt.userId}" th:href="@{/users/{userId}(userId=${appt.userId})}"></a>
+                [Appt] <a th:text="${appt.id}" th:href="@{/users/{userId}/appointments/{apptId}(userId=${appt.userId}, apptId=${appt.id})}"></a>
+            </td>
             <td th:text="${appt.apptName}"></td>
             <td th:text="${appt.apptType}"></td>
             <td th:text="${appt.description}"></td>
             <td th:text="${appt.startTime}"></td>
             <td th:text="${appt.endTime}"></td>
             <td th:text="${appt.metadata}"></td>
-            <td></td>
+            <td>
+                <form onsubmit="setTimeout(function(){window.location.reload();},800);" th:action="@{{userId}/appointments/{apptId}(userId=${appt.userId}, apptId=${appt.id})}" th:method="delete"><button type="submit" class="btn btn-danger">Delete</button></form>
+                <br>
+                <form th:action="@{/users/{userId}/appointments/{apptId}/edit-appt(userId=${appt.userId}, apptId=${appt.id})}">
+                <button type="submit" class="btn btn-primary">Edit</button></form>
+            </td>
         </tr>
         </tbody>
     </table>
+    <div class="info">
+        <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+        Info! Visit the individual user page to make an appointment for that user.
+    </div>
     <a href="/home">Back to Home</a>
 </div>
-<h2>Visit individual user page to create an appointment.</h2>
 </body>
 </html>

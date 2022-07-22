@@ -75,7 +75,7 @@
             <td th:text="${appt.startTime}"></td>
             <td th:text="${appt.endTime}"></td>
             <td th:text="${appt.metadata}"></td>
-            <td><form onsubmit="setTimeout(function(){window.location.reload();},500);" th:action="@{/{userId}/appointments/{apptId}(userId=${user.id}, apptId=${appt.id})}" th:method="delete">
+            <td><form onsubmit="setTimeout(function(){window.location.reload();},800);" th:action="@{/{userId}/appointments/{apptId}(userId=${user.id}, apptId=${appt.id})}" th:method="delete">
                 <button type="submit" class="btn btn-danger">Delete</button>
             </form></td>
         </tr>

@@ -95,7 +95,6 @@ public class AdminController {
 
     @PostMapping("/{userId}/appointments")
     public String createAppt(@ModelAttribute @RequestBody ApptFormatter apptFormatter, @PathVariable("userId") String userId) {
-        System.out.println("In AdminController");
         UserDto user = new AdminClient(new RestTemplateBuilder()).getUserById(userId);
         new AdminClient(new RestTemplateBuilder()).createAppt(apptFormatter, user);
         return "redirect:/users/" + userId;
@@ -125,8 +124,9 @@ public class AdminController {
 
     @PutMapping("/users/{userId}/appointments/{apptId}")
     public String updateAppt(@ModelAttribute @RequestBody ApptFormatter apptFormatter, @PathVariable("userId") String userId, @PathVariable("apptId") String apptId) {
+        UserDto user = new AdminClient(new RestTemplateBuilder()).getUserById(userId);
         apptFormatter.setId(apptId);
-        new AdminClient(new RestTemplateBuilder()).updateAppt(apptId, apptFormatter);
+        new AdminClient(new RestTemplateBuilder()).updateAppt(apptId, apptFormatter, user);
 
         return "redirect:/users/" + userId + "/appointments/" + apptId;
     }

@@ -19,22 +19,28 @@
 
     <form th:action="@{/users/{userId}/appointments/{apptId}(userId=${user.id}, apptId=${appt.id})}" th:object="${appt}" th:method="put">
 
-        <input type="text" th:field="*{apptName}" placeholder="Name of the appointment." class="form-control mb-4 col-4">
+        <label for="name">Appointment Name</label>
+        <input id="name" type="text" th:field="*{apptName}" placeholder="Name of the appointment." class="form-control mb-4 col-4" required>
 
-        <select th:field="*{apptType}" class="form-control mb-4 col-4">
+        <label for="type">Appointment Type</label>
+        <select id="type" th:field="*{apptType}" class="form-control mb-4 col-4" required>
             <option value="PRIMARY_CARE">Primary Care</option>
             <option value="OPTOMETRIST">Optometrist</option>
             <option value="DENTIST">Dentist</option>
             <option value="DERMATOLOGIST">Dermatologist</option>
         </select>
 
-        <input type="text" th:field="*{description}" placeholder="Provide a brief description." class="form-control mb-4 col-4">
+        <label for="desc">Appointment Description</label>
+        <input id="desc" type="text" th:field="*{description}" placeholder="Provide a brief description." class="form-control mb-4 col-4">
 
-        Start Time: <input type="datetime-local" name="startTime" th:field="*{startTime}" class="form-control mb-4 col-4">
+        <label for="start">Start Date/Time</label>
+        <input id="start" type="datetime-local" name="startTime" th:field="*{startTime}" class="form-control mb-4 col-4" required>
 
-        End Time: <input type="datetime-local" name="endTime" th:field="*{endTime}" class="form-control mb-4 col-4">
+        <label for="end">End Date/Time</label>
+        <input id="end" type="datetime-local" name="endTime" th:field="*{endTime}" class="form-control mb-4 col-4" required>
 
-        <input type="text" th:field="*{metadata}" placeholder="Provide any additional information." class="form-control mb-4 col-4">
+        <label for="meta">Metadata</label>
+        <input id="meta" type="text" th:field="*{metadata}" placeholder="Provide any additional information." class="form-control mb-4 col-4">
 
         <button type="submit" class="btn btn-info col-2">Save Changes</button>
     </form>

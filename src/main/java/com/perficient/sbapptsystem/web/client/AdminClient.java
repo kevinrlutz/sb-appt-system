@@ -93,8 +93,6 @@ public class AdminClient {
         LocalDateTime formattedStartTime = LocalDateTime.parse(startTime, formatter);
         LocalDateTime formattedEndTime = LocalDateTime.parse(endTime, formatter);
 
-        System.out.println("In AdminClient 1");
-
         ApptDto saveAppt = ApptDto.builder()
                 .id(new ObjectId().toString())
                 .apptName(apptFormatter.getApptName())
@@ -106,16 +104,16 @@ public class AdminClient {
                 .userId(user.getId())
                 .build();
 
-        System.out.println(saveAppt);
         user.getAppointmentList().add(saveAppt);
         updateUser(user.getId(), user);
-
-        System.out.println("In AdminClient 2");
 
         return restTemplate.postForObject("http://localhost:8081/appointments/", saveAppt, ApptDto.class);
     }
 
     public void deleteUser(String userId) {
+        UserDto user = getUserById(userId);
+        user.getAppointmentList().stream().forEach(appt -> deleteAppt(userId, appt.getId()));
+
         restTemplate.delete("http://localhost:8080/api/v1/users/" + userId);
     }
 
@@ -133,7 +131,8 @@ public class AdminClient {
         this.apiHost = apiHost;
     }
 
-    public void updateAppt(String apptId, @RequestBody ApptFormatter apptFormatter) {
+    public void updateAppt(String apptId, @RequestBody ApptFormatter apptFormatter, UserDto user) {
+        ApptDto deleteAppt = getApptById(apptId);
 
         String startTime = apptFormatter.getStartTime();
         String endTime = apptFormatter.getEndTime();
@@ -152,6 +151,10 @@ public class AdminClient {
                 .metadata(apptFormatter.getMetadata())
                 .userId(apptFormatter.getUserId())
                 .build();
+
+        user.getAppointmentList().remove(deleteAppt);
+        user.getAppointmentList().add(updateAppt);
+        updateUser(user.getId(), user);
 
         restTemplate.put("http://localhost:8081/appointments/" + apptId, updateAppt);
     }
