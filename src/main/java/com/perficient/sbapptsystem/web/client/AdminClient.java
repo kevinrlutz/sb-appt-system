@@ -4,7 +4,6 @@ import com.perficient.sbapptsystem.web.model.ApptDto;
 import com.perficient.sbapptsystem.web.model.ApptFormatter;
 import com.perficient.sbapptsystem.web.model.UserDto;
 import org.bson.types.ObjectId;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,11 +15,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
-@ConfigurationProperties(value = "app.admin", ignoreUnknownFields = false)
 public class AdminClient {
 
-    public final String USER_PATH = "/api/v1/users";
-    private String apiHost;
+    public final String USER_PATH = "/api/v1/users/";
+
+    private final String userServiceUrl = "http://localhost:8080";
+
+    private final String apptServiceUrl = "http://localhost:8081";
 
     private final RestTemplate restTemplate;
 
@@ -29,28 +30,31 @@ public class AdminClient {
     }
 
     public List<UserDto> getAllUsers() {
-        return restTemplate.getForObject("http://localhost:8080/api/v1/users", List.class);
+        return restTemplate.getForObject(userServiceUrl + USER_PATH, List.class);
     }
 
     public List<ApptDto> getAllAppts() {
-        return restTemplate.getForObject("http://localhost:8081/appointments", List.class);
+        return restTemplate.getForObject(apptServiceUrl + "/appointments/", List.class);
     }
 
     public UserDto getUserById(String userId) {
-        return restTemplate.getForObject("http://localhost:8080/api/v1/users/" + userId, UserDto.class);
+        return restTemplate.getForObject(userServiceUrl + USER_PATH + userId, UserDto.class);
+    }
+
+    public List<ApptDto> getUserAppointments(String userId) {
+        return restTemplate.getForObject(apptServiceUrl + "/" + userId + "/appointments", List.class);
     }
 
     public ApptDto getApptById(String apptId) {
-        return restTemplate.getForObject("http://localhost:8081/appointments/" + apptId, ApptDto.class);
+        return restTemplate.getForObject(apptServiceUrl + "/appointments/" + apptId, ApptDto.class);
     }
 
     public List<UserDto> findByLastName(String lastName) {
-        return restTemplate.getForObject("http://localhost:8080/api/v1/users/search/" + lastName, List.class);
+        return restTemplate.getForObject(userServiceUrl + USER_PATH + "search/" + lastName, List.class);
     }
 
     public List<ApptDto> findByApptName(String apptName) {
-        System.out.println("In findByApptName client method");
-        return restTemplate.getForObject("http://localhost:8081/appointments/search/" + apptName, List.class);
+        return restTemplate.getForObject(apptServiceUrl + "/appointments/search/" + apptName, List.class);
     }
 
     public void updateUser(String userId, @RequestBody UserDto user) {
@@ -65,7 +69,7 @@ public class AdminClient {
                 .appointmentList(user.getAppointmentList())
                 .build();
 
-        restTemplate.put("http://localhost:8080/api/v1/users/" + userId, updatedUser);
+        restTemplate.put(userServiceUrl + USER_PATH + userId, updatedUser);
     }
 
     public UserDto createUser(@RequestBody UserDto user) {
@@ -80,7 +84,7 @@ public class AdminClient {
                 .appointmentList(new ArrayList<>())
                 .build();
 
-        return restTemplate.postForObject("http://localhost:8080/api/v1/users/", saveUser, UserDto.class);
+        return restTemplate.postForObject(userServiceUrl + USER_PATH, saveUser, UserDto.class);
     }
 
     public ApptDto createAppt(@RequestBody ApptFormatter apptFormatter, UserDto user) {
@@ -107,14 +111,14 @@ public class AdminClient {
         user.getAppointmentList().add(saveAppt);
         updateUser(user.getId(), user);
 
-        return restTemplate.postForObject("http://localhost:8081/appointments/", saveAppt, ApptDto.class);
+        return restTemplate.postForObject(apptServiceUrl + "/appointments/", saveAppt, ApptDto.class);
     }
 
     public void deleteUser(String userId) {
         UserDto user = getUserById(userId);
         user.getAppointmentList().stream().forEach(appt -> deleteAppt(userId, appt.getId()));
 
-        restTemplate.delete("http://localhost:8080/api/v1/users/" + userId);
+        restTemplate.delete(userServiceUrl + USER_PATH + userId);
     }
 
     public void deleteAppt(String userId, String apptId) {
@@ -124,11 +128,7 @@ public class AdminClient {
         user.getAppointmentList().remove(deleteAppt);
         updateUser(user.getId(), user);
 
-        restTemplate.delete("http://localhost:8081/appointments/" + apptId);
-    }
-
-    public void setApiHost(String apiHost) {
-        this.apiHost = apiHost;
+        restTemplate.delete(apptServiceUrl + "/appointments/" + apptId);
     }
 
     public void updateAppt(String apptId, @RequestBody ApptFormatter apptFormatter, UserDto user) {
@@ -156,7 +156,7 @@ public class AdminClient {
         user.getAppointmentList().add(updateAppt);
         updateUser(user.getId(), user);
 
-        restTemplate.put("http://localhost:8081/appointments/" + apptId, updateAppt);
+        restTemplate.put(apptServiceUrl + "/appointments/" + apptId, updateAppt);
     }
 
 }

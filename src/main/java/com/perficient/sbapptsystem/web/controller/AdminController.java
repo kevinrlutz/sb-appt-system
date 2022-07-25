@@ -4,6 +4,7 @@ import com.perficient.sbapptsystem.web.client.AdminClient;
 import com.perficient.sbapptsystem.web.model.ApptDto;
 import com.perficient.sbapptsystem.web.model.ApptFormatter;
 import com.perficient.sbapptsystem.web.model.UserDto;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -41,6 +42,7 @@ public class AdminController {
     @GetMapping("/users/{userId}")
     public String user(Model model, @PathVariable("userId") String userId) {
         model.addAttribute("user", new AdminClient(new RestTemplateBuilder()).getUserById(userId));
+        model.addAttribute("apptList", new AdminClient(new RestTemplateBuilder()).getUserAppointments(userId));
         return "user";
     }
 

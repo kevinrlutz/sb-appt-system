@@ -67,7 +67,7 @@
         </tr>
         </thead>
         <tbody>
-        <tr th:each="appt:${user.appointmentList}">
+        <tr th:each="appt:${apptList}">
             <td><a th:text="${appt.id}" th:href="@{/users/{userId}/appointments/{apptId}(userId=${user.id}, apptId=${appt.id})}"></a></td>
             <td th:text="${appt.apptName}"></td>
             <td th:text="${appt.apptType}"></td>
