@@ -50,7 +50,11 @@ public class AdminClient {
     }
 
     public List<UserDto> findByLastName(String lastName) {
-        return restTemplate.getForObject(userServiceUrl + USER_PATH + "search/" + lastName, List.class);
+        return restTemplate.getForObject(userServiceUrl + USER_PATH + "search/lastName/" + lastName, List.class);
+    }
+
+    public List<UserDto> findByEmail(String email) {
+        return restTemplate.getForObject(userServiceUrl + USER_PATH + "search/email/" + email, List.class);
     }
 
     public List<ApptDto> findByApptName(String apptName) {

@@ -16,16 +16,35 @@
 <div class="container">
     <h1>Appointment Management System | List of Users</h1>
     <br/>
-    <form th:object="${searchDto}" th:action="@{/users/search/}" method="POST">
-        <div class="form-group">
-            <label for="search">Search by Last Name</label>
-            <input type="text" id="search" th:field="*{lastName}" class="form-control col-4" placeholder="Search (Last Name)">
+
+    <div class="container">
+
+        <div class="row">
+            <form th:object="${searchDto}" th:action="@{/users/search/lastName}" method="POST" class="mr-5 col-4">
+                <div class="form-group">
+                    <label for="search">Search by Last Name</label>
+                    <input type="text" id="search" th:field="*{lastName}" class="form-control" placeholder="Search (Last Name)">
+                </div>
+                    <div class="btn-group">
+                        <button type="submit" class="btn btn-primary rounded mr-5">Search</button>
+                        <a href="/users" class="btn btn-primary rounded">Show All</a>
+                    </div>
+            </form>
+
+            <form th:object="${searchDto}" th:action="@{/users/search/email}" method="POST" class="ml-5 col-4">
+                <div class="form-group">
+                    <label for="search-email">Search by Email</label>
+                    <input type="email" id="search-email" th:field="*{email}" class="form-control" placeholder="Search (Email)">
+                </div>
+                <div class="btn-group">
+                    <button type="submit" class="btn btn-primary rounded mr-5">Search</button>
+                    <a href="/users" class="btn btn-primary rounded">Show All</a>
+                </div>
+            </form>
         </div>
-            <div class="btn-group">
-                <button type="submit" class="btn btn-primary rounded mr-5">Search</button>
-                <a href="/users" class="btn btn-primary rounded">Show All</a>
-            </div>
-    </form>
+
+    </div>
+
     <br/>
     <br/>
     <table id="t1" class="table" th:if="${userList.size() > 0}">
