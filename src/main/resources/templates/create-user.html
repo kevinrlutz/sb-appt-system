@@ -17,7 +17,9 @@
     <br/>
     <h3>Create New User</h3>
     <br>
-
+    <div th:if="${emailExists}" class="alert alert-danger col-4">
+        <strong>Email already exists! Emails must be unique.</strong>
+    </div>
     <form th:action="@{/create}" th:object="${user}" th:method="post">
         <label for="firstName">First Name:</label>
         <input id="firstName" type="text" th:field="*{firstName}" placeholder="First Name" class="form-control mb-4 col-4" required>

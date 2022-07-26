@@ -4,7 +4,6 @@ import com.perficient.sbapptsystem.web.client.AdminClient;
 import com.perficient.sbapptsystem.web.model.ApptDto;
 import com.perficient.sbapptsystem.web.model.ApptFormatter;
 import com.perficient.sbapptsystem.web.model.UserDto;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -53,9 +52,12 @@ public class AdminController {
         return "appt";
     }
 
+    boolean emailExists = false;
+
     @GetMapping("/create-user")
     public String createUser(Model model) {
         model.addAttribute("user", new UserDto());
+        model.addAttribute("emailExists", emailExists);
         return "create-user";
     }
 
@@ -67,13 +69,23 @@ public class AdminController {
     }
 
 
-    @RequestMapping(value = "/users/search/",
+    @RequestMapping(value = "/users/search/lastName",
             method = RequestMethod.POST,
             consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE,
             produces = {MediaType.APPLICATION_ATOM_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
-    public String searchUser(Model model, UserDto searchDto) {
+    public String searchUserByLastName(Model model, UserDto searchDto) {
         model.addAttribute("searchDto", new UserDto());
         model.addAttribute("userList", new AdminClient(new RestTemplateBuilder()).findByLastName(searchDto.getLastName()));
+        return "list-users";
+    }
+
+    @RequestMapping(value = "/users/search/email",
+            method = RequestMethod.POST,
+            consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE,
+            produces = {MediaType.APPLICATION_ATOM_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
+    public String searchUserByEmail(Model model, UserDto searchDto) {
+        model.addAttribute("searchDto", new UserDto());
+        model.addAttribute("userList", new AdminClient(new RestTemplateBuilder()).findByEmail(searchDto.getEmail()));
         return "list-users";
     }
 
@@ -82,7 +94,6 @@ public class AdminController {
             consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE,
             produces = {MediaType.APPLICATION_ATOM_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
     public String searchAppt(Model model, ApptDto searchDto) {
-        System.out.println("In searchAppt controller method");
         model.addAttribute("searchAppt", new ApptDto());
         model.addAttribute("apptList", new AdminClient(new RestTemplateBuilder()).findByApptName(searchDto.getApptName()));
         return "list-appts";
@@ -91,8 +102,14 @@ public class AdminController {
 
     @PostMapping("/create")
     public String createUser(@ModelAttribute @RequestBody UserDto user) {
-        new AdminClient(new RestTemplateBuilder()).createUser(user);
-        return "redirect:/users";
+        if (new AdminClient(new RestTemplateBuilder()).findByEmail(user.getEmail()).size() > 0) {
+            emailExists = true;
+            return "redirect:/create-user";
+        } else {
+            emailExists = false;
+            new AdminClient(new RestTemplateBuilder()).createUser(user);
+            return "redirect:/users";
+        }
     }
 
     @PostMapping("/{userId}/appointments")
