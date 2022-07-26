@@ -21,7 +21,7 @@ public class AdminClient {
 
     private final String userServiceUrl = "http://localhost:8080";
 
-    private final String apptServiceUrl = "http://localhost:8081";
+    private final String apptServiceUrl = "http://localhost:8081/appointments/";
 
     private final RestTemplate restTemplate;
 
@@ -34,7 +34,7 @@ public class AdminClient {
     }
 
     public List<ApptDto> getAllAppts() {
-        return restTemplate.getForObject(apptServiceUrl + "/appointments/", List.class);
+        return restTemplate.getForObject(apptServiceUrl, List.class);
     }
 
     public UserDto getUserById(String userId) {
@@ -42,11 +42,11 @@ public class AdminClient {
     }
 
     public List<ApptDto> getUserAppointments(String userId) {
-        return restTemplate.getForObject(apptServiceUrl + "/" + userId + "/appointments", List.class);
+        return restTemplate.getForObject(apptServiceUrl + "user/" + userId, List.class);
     }
 
     public ApptDto getApptById(String apptId) {
-        return restTemplate.getForObject(apptServiceUrl + "/appointments/" + apptId, ApptDto.class);
+        return restTemplate.getForObject(apptServiceUrl + apptId, ApptDto.class);
     }
 
     public List<UserDto> findByLastName(String lastName) {
@@ -54,7 +54,7 @@ public class AdminClient {
     }
 
     public List<ApptDto> findByApptName(String apptName) {
-        return restTemplate.getForObject(apptServiceUrl + "/appointments/search/" + apptName, List.class);
+        return restTemplate.getForObject(apptServiceUrl + "search/" + apptName, List.class);
     }
 
     public void updateUser(String userId, @RequestBody UserDto user) {
@@ -111,7 +111,7 @@ public class AdminClient {
         user.getAppointmentList().add(saveAppt);
         updateUser(user.getId(), user);
 
-        return restTemplate.postForObject(apptServiceUrl + "/appointments/", saveAppt, ApptDto.class);
+        return restTemplate.postForObject(apptServiceUrl, saveAppt, ApptDto.class);
     }
 
     public void deleteUser(String userId) {
@@ -128,7 +128,7 @@ public class AdminClient {
         user.getAppointmentList().remove(deleteAppt);
         updateUser(user.getId(), user);
 
-        restTemplate.delete(apptServiceUrl + "/appointments/" + apptId);
+        restTemplate.delete(apptServiceUrl + apptId);
     }
 
     public void updateAppt(String apptId, @RequestBody ApptFormatter apptFormatter, UserDto user) {
@@ -156,7 +156,7 @@ public class AdminClient {
         user.getAppointmentList().add(updateAppt);
         updateUser(user.getId(), user);
 
-        restTemplate.put(apptServiceUrl + "/appointments/" + apptId, updateAppt);
+        restTemplate.put(apptServiceUrl + apptId, updateAppt);
     }
 
 }
