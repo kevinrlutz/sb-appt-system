@@ -1,5 +1,7 @@
 package com.perficient.sbapptsystem.web.client;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.perficient.sbapptsystem.web.model.ApptDto;
 import com.perficient.sbapptsystem.web.model.ApptFormatter;
 import com.perficient.sbapptsystem.web.model.UserDto;
@@ -12,7 +14,9 @@ import org.springframework.web.client.RestTemplate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Component
 public class AdminClient {
@@ -47,6 +51,18 @@ public class AdminClient {
 
     public ApptDto getApptById(String apptId) {
         return restTemplate.getForObject(apptServiceUrl + apptId, ApptDto.class);
+    }
+
+    public Map<String, String> getUserMap() {
+        Map<String, String> userMap = new HashMap();
+        ObjectMapper mapper = new ObjectMapper();
+        List<UserDto> userList = mapper.convertValue(getAllUsers(), new TypeReference<List<UserDto>>() { });
+
+        for(UserDto user : userList) {
+            userMap.put(user.getId(), user.getFirstName() + " " + user.getLastName());
+        }
+
+        return userMap;
     }
 
     public List<UserDto> findByLastName(String lastName) {
