@@ -75,8 +75,7 @@
         </thead>
         <tbody>
         <tr th:each="appt:${apptList}">
-            <!--<td class="cell"> [User] <a th:text="${userMap.get(appt.userId)}" th:href="@{/users/{userId}(userId=${appt.userId})}"></a></td>-->
-            <td th:text="${appt.userId}"></td>
+            <td><a th:text="${appt.userId}" th:href="@{/users/{userId}(userId=${appt.userId})}"></a></td>
             <td><a th:text="${appt.apptName}" th:href="@{/users/{userId}/appointments/{apptId}(userId=${appt.userId}, apptId=${appt.id})}"></a></td>
             <td th:text="${appt.apptType}"></td>
             <td th:text="${appt.description}"></td>

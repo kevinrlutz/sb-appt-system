@@ -34,8 +34,8 @@ public class AdminController {
     @GetMapping("/appointments")
     public String appointments(Model model) {
         model.addAttribute("apptList", new AdminClient(new RestTemplateBuilder()).getAllAppts());
-        // model.addAttribute("userMap", new AdminClient(new RestTemplateBuilder()).getUserMap());
         model.addAttribute("searchAppt", new ApptDto());
+
         return "list-appts";
     }
 
@@ -96,7 +96,6 @@ public class AdminController {
             produces = {MediaType.APPLICATION_ATOM_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
     public String searchAppt(Model model, ApptDto searchDto) {
         model.addAttribute("searchAppt", new ApptDto());
-        // model.addAttribute("userMap", new AdminClient(new RestTemplateBuilder()).getUserMap());
         model.addAttribute("apptList", new AdminClient(new RestTemplateBuilder()).findByApptName(searchDto.getApptName()));
         return "list-appts";
     }
